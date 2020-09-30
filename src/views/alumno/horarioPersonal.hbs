@@ -1,0 +1,58 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto pt-5">
+            <div class="card">
+                <div class="card-body">
+                    {{#if result}}{{!Si existen materias en el horario personalizado}}
+                    <div class="row">
+                        <div class="col ">
+                            <h2>Mi horario</h2>
+                        </div>
+                        <div class="col" style="text-align: right;">
+                            <a href="/alumno/agregar" class="btn btn-primary">Agregar Materia</a>
+                        </div>
+                    </div>
+                    <div class="panel panel-primary">
+                        <div class="panel-body scrollable-panel" style="width: 700px; height: 400px">
+                            <div class="col-md">
+                                <div class="row p-2">
+                                    <table class="table table-dark">
+                                        <thead>
+                                            <th>Materia</th>
+                                            <th>Grupo</th>
+                                            <th>Horario</th>
+                                            <th>Profesor</th>
+                                            <th>Lugar</th>
+                                            <th>Acciones</th>
+                                        </thead>
+                                        <tbody>
+                                            {{#each result}}
+                                            <tr>
+                                                <td>{{nombre_mt}}</td>
+                                                <td>{{nombre_grupo}}</td>
+                                                <td>{{dia}} - {{hora_clase}}</td>
+                                                <td>{{nombre_prof}}</td>
+                                                <td>{{nombre_lugar}}</td>
+                                                <td>
+                                                    <a href="/alumno/eliminarMateria/{{id_horario}}"
+                                                        class="btn btn-danger">Eliminar</a>
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{else}}{{!Si no existen materias}}
+                    <div class="text-center">
+                        <h3>¡Aún no tienes materias en tu horario!</h3>
+                        <a href="/alumno/agregar" class="btn btn-primary">¡Agrega una!</a>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

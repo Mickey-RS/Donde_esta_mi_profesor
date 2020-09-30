@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="/img/Logo.PNG" width="400" height="40">
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {{#if user}}
+                <li class="nav-item">
+                    <label class="nav-link active">
+                        Has iniciado sesión como: 
+                        {{#if user.nombre}}
+                            {{user.nombre}}
+                        {{else}}
+                            {{user.nombre_prof}} (Profesor)
+                        {{/if}}
+                    </label>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active" href="#" id="navbarAlumno" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Opciones
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarAlumno">
+                        {{#if user.id_alumno}}
+                        <a class="dropdown-item" href="/alumno">Mi horario</a>
+                        {{else}}
+                        <a class="dropdown-item" href="/profesor">Mi perfil</a>
+                        {{/if}}
+                        <a class="dropdown-item" href="/cerrarSesion">Cerrar Sesión</a>
+                    </div>
+                </li>
+                {{else}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active" href="#" id="navbarRegistro" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Registrarse
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarRegistro">
+                        <a class="dropdown-item" href="/registro">Como alumno</a>
+                        <a class="dropdown-item" href="/registroProfesor">Como profesor</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/ingresar">Iniciar Sesión</a>
+                </li>
+                {{/if}}
+            </ul>
+        </div>
+    </div>
+</nav>

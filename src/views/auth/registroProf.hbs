@@ -1,0 +1,31 @@
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>¡Regístrate como profesor!</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <img src="img/Profesor.png" alt="Profesor" width="250px" height="250px">                        
+                        <form action="/registroProfesor" method="POST">
+                            <div class="form-group autocomplete">
+                                <input type="text" id="RegistroProf" class="form-control" name="nombreProfRegistro"
+                                    placeholder="Nombre" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" name="mailProf" placeholder="e-mail" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="passwordProf" placeholder="Contraseña" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-block">¡Hecho!</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

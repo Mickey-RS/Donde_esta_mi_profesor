@@ -1,0 +1,171 @@
+<div class="container pt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>{{user.nombre_prof}}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5>Horario: {{user.hora_ent}} - {{user.hora_sal}}</h5>
+                        </div>
+                        <div class="col" style="text-align: right;">
+                            <button class="btn btn-primary" onclick="ocultarMenu('MenuEditar')">Editar</button>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div id="MenuEditar" style="border:1px solid white; display:none" class="p-3">
+                        <form action="/profesor/actualizarHorario" method="POST">
+                            <div class="row mx-auto">
+                                <label class="my-auto">Nuevo Horario:</label>
+                                <div class="col-sm-3">
+                                    <input id="HoraEntrada" name="HoraEnt" type="text" class="form-control"
+                                        placeholder="HH:MM">
+                                </div>
+                                <label class="my-auto">-</label>
+                                <div class="col-sm-3">
+                                    <input id="HoraSalida" name="HoraSal" type="text" class="form-control"
+                                        placeholder="HH:MM">
+                                </div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-success">Actualizar</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="dropdown-divider"></div>
+                    </div>
+                    <div class="co-md-6">
+                        {{#if result}}
+                        <div class="row">
+                            <div class="col">
+                                <h5>Asesorías</h5>
+                            </div>
+                            <div class="col" style="text-align: right;">
+                                <button class="btn btn-primary" onclick="ocultarMenu('MenuAgregar')">Agregar nueva
+                                asesoría</button>
+                            </div>
+                        </div>
+                        <div id="MenuAgregar" style="border: 1px solid white; display:none" class="p-3">
+                            <div class="dropdown-divider"></div>
+                            <form action="/profesor/agregarAsesoria" method="POST">
+                                <div class="form-group autocomplete">
+                                    <input type="text" name="MatAsesoria" id="MatA" class="form-control"
+                                        placeholder="Materia" required>
+                                    <div class="invalid-feedback">Ingresa una materia</div>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="DiaAsesoria" required>
+                                        <option value="-Cualquier Día-">- Cualquier Día -</option>
+                                        <option value="Lunes">Lunes</option>
+                                        <option value="Martes">Martes</option>
+                                        <option value="Miercoles">Miercoles</option>
+                                        <option value="Jueves">Jueves</option>
+                                        <option value="Viernes">Viernes</option>
+                                    </select>
+                                    <div class="invalid-feedback">Selecciona un día</div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="HoraAsesoria" class="form-control"
+                                        placeholder="Hora: HH:MM - HH:MM" required>
+                                    <div class="invalid-feedback">Ingresa un horario</div>
+                                </div>
+                                <div class="form-group autocomplete">
+                                    <input type="text" id="LugarA" name="LugarAsesoria" class="form-control"
+                                        placeholder="Lugar" required>
+                                    <div class="invalid-feedback">Seleciona un lugar</div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-success btn-block">¡Hecho!</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-body scrollable-panel" style="width: 700px; height: 270px">
+                                <div class="col-md">
+                                    <div class="row p-2">
+                                        <table class="table table-dark">
+                                            <thead>
+                                                <th>Dia</th>
+                                                <th>Hora</th>
+                                                <th>Materia</th>
+                                                <th>Lugar</th>
+                                                <th>Acciones</th>
+                                            </thead>
+                                            <tbody>
+                                                {{#each result}}
+                                                <tr>
+                                                    <td>{{dia}}</td>
+                                                    <td>{{hora_asesoria}}</td>
+                                                    <td>{{nombre_mt}}</td>
+                                                    <td>{{nombre_lugar}}</td>
+                                                    <td>
+                                                        <a href="/profesor/eliminarAsesoria/{{id_asesoria}}"
+                                                            class="btn btn-danger">Eliminar</a>
+                                                    </td>
+                                                </tr>
+                                                {{/each}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <div>
+                            <div class="text-center">
+                                <p>
+                                <h5>No tienes ningún horario de asesoría</h5>
+                                </p>
+                                <button class="btn btn-primary" onclick="ocultarMenu('MenuAgregar')">¡Agrega una
+                                    asesoría!</button>
+                            </div>
+                            <div id="MenuAgregar" style="border: 1px solid white; display:none" class="p-3">
+                                <div class="dropdown-divider"></div>
+                                <form action="/profesor/agregarAsesoria" method="POST">
+                                    <div class="form-group autocomplete">
+                                        <input type="text" name="MatAsesoria" id="MatA" class="form-control"
+                                            placeholder="Materia">
+                                    </div>
+                                    <div class="form-group">
+                                        <select class="form-control" name="DiaAsesoria">
+                                            <option value="--Cualquier Día--">-- Cualquier Día --</option>
+                                            <option value="Lunes">Lunes</option>
+                                            <option value="Martes">Martes</option>
+                                            <option value="Miercoles">Miercoles</option>
+                                            <option value="Jueves">Jueves</option>
+                                            <option value="Viernes">Viernes</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="HoraAsesoria" class="form-control"
+                                            placeholder="Hora: HH:MM - HH:MM">
+                                    </div>
+                                    <div class="form-group autocomplete">
+                                        <input type="text" id="LugarA" name="LugarAsesoria" class="form-control"
+                                            placeholder="Lugar">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-success btn-block">¡Hecho!</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function ocultarMenu(menu) {
+        var x = document.getElementById(menu);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>

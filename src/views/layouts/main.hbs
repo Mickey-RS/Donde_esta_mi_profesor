@@ -1,0 +1,247 @@
+{{!Plantilla principal de la aplicación}}
+{{!Aquí irán las partes comunes de la app, como la navegación, footer, etc}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>¿Donde está mi profesor?</title>
+    {{! Fuente de Google Fonts (Comfortaa)}}
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap" rel="stylesheet">
+    {{!Bootstarp}}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    {{!Estilos CSS}}
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+
+    {{> navigation}}
+
+    {{> message}}
+
+    {{{body}}} {{!El código solo va a cambiar en ésta sección, todo lo demás es igual para TODAS las vistas}}
+
+    {{!Scripts de autocompletado}}
+    <script>
+        function autocomplete(inp, arr) {
+            /*Se requieren dos parámetros, el id del campo a autocompletar y el arreglo con el que
+            se completará*/
+            var currentFocus;
+            //Ejecutar cuando se escribe en el campo de texto
+            inp.addEventListener("input", function (e) {
+                var a, b, i, val = this.value;
+                //Cerrar algún otro autocompletado
+                closeAllLists();
+                if (!val) { return false; }
+                currentFocus = -1;
+                //Crear un div, para las opciones
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                //Convertir al div en "hijo" del contenedor de autocompletado
+                this.parentNode.appendChild(a);
+                //para cada elemento
+                for (i = 0; i < arr.length; i++) {
+                    //revisar si algún elemento del areglo original empieza por la letra pulsada
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        //Se crea un div por cada coincidencia encontrada
+                        b = document.createElement("DIV");
+                        //Los resultados en negrita
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].substr(val.length);
+                        //Un input field que irá guardando el arreglo actual en cada momento
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        b.addEventListener("click", function (e) {
+                            //Insertar el valor del arreglo de autocompletado
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            //Cerrar la lista de valores autocompletados
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            //Cunaod se presiona alguna tecla
+            inp.addEventListener("keydown", function (e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {//tecla abajo
+                    //Si se presiona la flecha hacia abajo, incrementar
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 38) { //tecla arriba
+                    //Si se presiona la flecha hacia arriba, decrementar
+                    currentFocus--;
+                    //Hacer visible el elemento actual
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    //Si se presiona enter
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+
+            function addActive(x) {
+                if (!x) return false;
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+
+            function removeActive(x) {
+                //Remover el estado "activo"                
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+
+            function closeAllLists(elmnt) {
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            //Ejecutar cuando se da un click
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
+
+        docenteslist = ['Acosta Magallanes Fermín', 'Aguilar Viveros Priciliano', 'Almendra Arao Felix', 'Alva Vargas Olivia',
+            'Anzueto Rios Álvaro', 'Aquino Robles José Antonio', 'Arvizu Amador Salvador Fernando', 'Ballardo Rodríguez Isis Chetzyl',
+            'Bermúdez Sosa José Alfredo', 'Briseño Tepepa Blanca Rosa', 'Brito Martínez Emilio Nicéforo', 'Bustamante Bahena Juan Antonio',
+            'CANDIDATO CB', 'CANDIDATO TECAV', 'Cabrera Arenas Víctor', 'Calzada Trujillo Rafael', 'Campos Vazquez Alfonso',
+            'Cantera Fernández Jesús', 'Canul Gómez Gimciam David', 'Carrillo Ibarra Iliana Cristina', 'Carrillo Tenorio Ariadna Berenice',
+            'Carvallo Domínguez Arodí Rafael', 'Castañeda Galván Adrián Antonio', 'Castillejos Rodríguez José', 'Castillo Padilla Eusebio',
+            'Castrejón Mendoza José Gilberto', 'Castro Pérez Hilda Cristina', 'Cedillo Rivas Martha Adoración',
+            'Chávez Espinoza Faride Adriana', 'Cigarroa Mayorga Oscar Eduardo', 'Corona Ramírez Leonel Germán', 'Cortez Herrera Paola Nayeli',
+            'Cortés Rodríguez Araceli', 'Cruz Maya Juan Antonio', 'Cruz Rivera Abraham', 'Cruz X Carlos', 'Cruz Y Cruz Sara Guadalupe',
+            'Cuervo Moreno Yelenia', 'De la Cruz Sosa Carlos', 'Del Villar Santos Carlos Raul', 'Domínguez Hernández Samuel',
+            'Díaz Valdés Elba', 'El Filali Brahim', 'Enríquez Ortiz Cyntia Eugenia', 'Escoto Mora Germán', 'Estrada Olivas Fernando',
+            'Fernandez Nava Cecilia', 'Fernánandez García José Nicolas', 'Fernández Zavala Raúl', 'Filio López Ernesto',
+            'Flores Campos Juan Alejandro', 'Flores Hernández Diego Alonso', 'Flores Mendez Ricardo', 'Fonseca Campos Jorge',
+            'Fonseca Ruiz Leonardo', 'Galicia Ruiz Maricela', 'Gallardo Lozada Arturo Alejandro', 'Galván Pastrana José Antonio',
+            'Galván Rodríguez Julio Esteban', 'García Arana Graciela', 'García Sánchez Mario Fidel', 'García Tejeda Yunia Verónica',
+            'Garduza González Sergio', 'González García Juan', 'González Navarro Yesenia Eleonor', 'González Sarabia Manuel',
+            'Gordillo Sol Alvaro', 'Guzmán Salgado Juan Carlos', 'Guzmán Vargaz Lev', 'Guzmán Álvarez Armando', 'Gómez Aguilar Ramón',
+            'Gómez Coronel Sandra Luz', 'Heredia Vargas Omar', 'Hernández Fajardo Oscar', 'Hernández Marín Héctor Jonatan',
+            'Hernández Mejía Carlos', 'Hernández Nava Carlos', 'Hernández Pérez Alberto', 'Hernández Rosas Juan', 'Hernández Tovar Rubén',
+            'Hernández Vargas Barbara Mitzy', 'Herrera Perez Jose Luis', 'Herrera Ávila Ramón', 'Horta Olivares Ricardo Roberto',
+            'Huerta Trujillo Iliac', 'Huitrón Ramírez Erick', 'Jaramillo Gómez Juan Antonio', 'Jiménez Fragoso Rogelio',
+            'Jiménez Pérez José Luis', 'Lanzagorta Sánchez María Guadalupe', 'Lashkevych x Igor', 'León Ponce Moisés',
+            'Lovtchikova Khavrachenco Zinaida', 'Lozada Castillo Norma Beatriz', 'Lucas Bravo Andrés', 'Lugo Peñaloza Armando Fabián',
+            'Luna Muñoz Martha', 'Luna Reséndiz José Concepción', 'López Alarcón Erick', 'Madrigal Bravo Juan Manuel',
+            'Malpica Flores Norma Patricia', 'Martínez Martínez Rafael', 'Martínez Pérez Lilia', 'Martínez Seis Bella Citlali',
+            'Martínez Solis Sandra', 'Mata Machuca Juan Luis', 'Mata Rivera Miguel Félix', 'Maza Casas Lamberto', 'Medina García Julieta',
+            'Mejía Méndez Juan Armando', 'Mendoza Cortés Héctor', 'Mendoza Iturralde Pablo', 'Mendoza Pedraza Adelina',
+            'Miranda Sánchez Michel Galaxia', 'Mollinedo Ponce de León Helvio Ricardo', 'Montes Campuzano Octavio', 'Mora Palacios Mariana',
+            'Morales Blas Adrian', 'Morales Hernández Agustín', 'Munguía Fuentes Maria del Rosario', 'Muñoz Rodríguez Cesáreo Javier',
+            'Méndez Alvarado Sergio', 'Méndez Martínez Mauricio', 'Navarrete Manzanilla Niels Henrik', 'Navarrete Meza Zulema',
+            'Obeso Santos Julian', 'Ojeda Mendoza Gualberto Jesús', 'Olvera Aldana Miguel', 'Orea Flores Izlian Yolanda',
+            'Ortíz Morales Alejandro', 'Palma Ramírez Diana', 'Pelayo Ramos Rodrigo', 'Peza Solís Juan Fernando', 'Peza Tapia Juan Manuel',
+            'Picazo Rojas Jesús Manuel', 'Pichardo Lagunas Obdulia', 'Polanco Montelongo Francisco', 'Pretelín Ricárdez Ángel',
+            'Pérez Cabrera Ilda Patricia', 'Pérez Delgado Yves Jesús', 'Pérez Hernández Jorge', 'Ramos Montiel Lucia',
+            'Ramírez Morales Adrian Octavio', 'Razo Ruiz Juan Carlos', 'Resendiz Mendoza Luis Martín', 'Reyes López Ottmar Raúl',
+            'Reyes Ramírez Israel', 'Reynosa González Luz Elizabeth', 'Rios Ramírez Carlos', 'Rivas Bonilla Elizabeth',
+            'Rodríguez Bello Juan Roberto', 'Rodríguez Fuentes Miguel Angel', 'Rodríguez Galeotte Abraham',
+            'Rodríguez Gómez Jesús Leopoldo', 'Rodríguez Herrera Leonora', 'Rodríguez Rodríguez Manuel Jesús',
+            'Rojas Beltrán Jorge', 'Rojas Pacheco Adolfo', 'Rosas Flores José Alfredo', 'Ríos Moguel Janette',
+            'Salazar Silva Gastón Hugo', 'Salinas Reyes Victor Alberto', 'Salmeron Guzmán Mirna', 'Salvador Mendoza Resendiz',
+            'Sanchez Herrera Yasser Idi', 'Sanchez Otero Griselda', 'Santiago Godoy Rafael', 'Serrano Fragoso Maricela',
+            'Sierra Romero Noé', 'Silva Arias Miguel', 'Silva Lomeli José de Jesus', 'Silva Millán Miguel Ranferi', 'Sin Asignar',
+            'Suarez Tapia Julio Cesar', 'Sánchez Nájera Susana Araceli', 'Torres Cruz Noé', 'Torres Nuñez Salvador',
+            'Tovar Corona Blanca', 'Trejo Osorio Diana Carolina', 'Trejo Salazar David Benjamín', 'Trejo Salazar Maricruz',
+            'Trovamala Landa Rafael', 'Téllez Alcaráz Fernando', 'Valaguez Velásquez Cuauhtémoc', 'Valaguez Velázquez Enrique',
+            'Valentino Orozco Gerardo Alejandro', 'Vallejo Aguirre Fernando', 'Vazquez Cianca César', 'Vazquez Cianca Israel',
+            'Velez Martínez Gabriela', 'Villegas Rueda Veronica Lucero', 'Viveros Breton Sergio', 'Yáñez Barraza Zenón',
+            'Ángeles Islas Jorge Fernando'
+        ]
+        aulaslist = ['AULA 102', 'AULA 103', 'AULA 104', 'AULA 105', 'AULA 106', 'AULA 121', 'AULA 122', 'AULA 123', 'AULA 124', 'AULA 125',
+            'AULA 126', 'AULA 201', 'AULA 202', 'AULA 221', 'AULA 222', 'AULA 223', 'AULA 224', 'AULA 225', 'AULA 226', 'AULA 322', 'AULA 323',
+            'AULA 324', 'AULA 325', 'AULA 326', 'AULA 423', 'AULA 424', 'AULA 425', 'AULA 426',
+            'CIM', 'Laboratorio de Bioelectrónica', 'Laboratorio de Biomecánica', 'Laboratorio de Electrónica I', 'Laboratorio de Electrónica II',
+            'Laboratorio de Electrónica III', 'Laboratorio de Física I', 'Laboratorio de Física II', 'Laboratorio de ISISA',
+            'Laboratorio de Ingles', 'Laboratorio de Máquinas y Herramientas', 'Laboratorio de Neumática y Control de Procesos',
+            'Laboratorio de Química y Biología', 'Laboratorio de Sistemas Digitales', 'Laboratorio de Telecomunicaciones',
+            'Laboratorio de Telemática I', 'Laboratorio de Telemática II', 'Sala de Cómputo I', 'Sala de Cómputo II', 'Sala de Cómputo III',
+            'Sala de Cómputo IV', 'Sala de Cómputo V', 'Sala de Cómputo VI', 'Sala de Cómputo VII', 'Sala de Cómputo VIII',
+            'Trabajo Terminal de Telemática', 'Sala de Profesores I', 'Sala de Profesores II']
+        gruposlist = ['1BM1', '1BM2', '1BM3', '1BM4', '1BV1', '1BV2', '1BV3', '1BV4', '1BV5', '1BV6', '1EM1', '1EV1', '1MM1', '1MM11',
+            '1MM12', '1MM13', '1MM2', '1MM3', '1MM4', '1MM5', '1MM6', '1MM7', '1MM8', '1MM9', '1MV1', '1MV10', '1MV11', '1MV12', '1MV2',
+            '1MV3', '1MV4', '1MV5', '1MV6', '1MV7', '1MV8', '1MV9', '1TM1', '1TM2', '1TM3', '1TM4', '1TM5', '1TM6', '1TM7', '1TV1', '1TV2',
+            '1TV3', '1TV4', '1TV5', '1TV6', '1TV7', '1TV8', '2BM1', '2BM2', '2BM3', '2BM4', '2BM5', '2BM6', '2BV1', '2BV2', '2BV3', '2BV4',
+            '2BV5', '2BV6', '2EM1', '2EV1', '2MM1', '2MM10', '2MM11', '2MM12', '2MM13', '2MM14', '2MM15', '2MM16', '2MM17', '2MM18', '2MM19',
+            '2MM2', '2MM20', '2MM21', '2MM3', '2MM4', '2MM5', '2MM6', '2MM7', '2MM8', '2MM9', '2MV1', '2MV10', '2MV11', '2MV12', '2MV13',
+            '2MV14', '2MV15', '2MV16', '2MV2', '2MV3', '2MV4', '2MV5', '2MV6', '2MV7', '2MV8', '2MV9', '2TM1', '2TM10', '2TM11', '2TM12',
+            '2TM2', '2TM3', '2TM4', '2TM5', '2TM6', '2TM7', '2TM8', '2TM9', '2TV1', '2TV12', '2TV13', '2TV2', '2TV3', '2TV4', '2TV5',
+            '2TV6', '2TV7', '2TV8', '3BM1', '3BM2', '3BM3', '3BM4', '3BM5', '3BV1', '3BV2', '3BV3', '3BV4', '3BV5', '3EV1', '3MM1',
+            '3MM10', '3MM2', '3MM3', '3MM4', '3MM5', '3MM6', '3MM7', '3MM8', '3MM9', '3MV1', '3MV10', '3MV11', '3MV2', '3MV3', '3MV4',
+            '3MV5', '3MV6', '3MV7', '3MV8', '3MV9', '3TM1', '3TM2', '3TM3', '3TM4', '3TM5', '3TM6', '3TV1', '3TV2', '3TV3', '3TV4',
+            '3TV5', '3TV6', '4BM1', '4BM2', '4BM3', '4BM4', '4BV1', '4BV2', '4BV3', '4BV4', '4BV5', '4MM1', '4MM2', '4MM3', '4MM4',
+            '4MM5', '4MM6', '4MM8', '4MM9', '4MV1', '4MV10', '4MV2', '4MV3', '4MV4', '4MV5', '4MV6', '4MV7', '4MV8', '4MV9', '4TM1',
+            '4TM2', '4TM3', '4TM4', '4TM5', '4TV1', '4TV2', '4TV3', '4TV4', '4TV5', '5BM1', '5BM2', '5BM3', '5BV1', '5BV2', '5BV3',
+            '5MM1', '5MM2', '5MM3', '5MM4', '5MM5', '5MM6', '5MV1', '5MV2', '5MV3', '5MV4', '5MV5', '5MV6', '7SV1', '8SM1', '9SV1', 'Sin Asignar']
+        asignaturaslist = ["Administracion organizacional","Administracion de proyectos","Administracion de sistemas operativos","Algebra lineal",
+        "Anatomia","Analisis numerico","Analisis de esfuerzos","Analisis de señales y sistemas","Analisis y diseño de programas","Analisis y diseño de sistemas",
+        "Analisis y sintesis de mecanismos","Aplicaciones distribuidas","Arquitectura de computadoras","Automatizacion industrial","Automatas industriales",
+        "Base de datos","Base de datos distribuidas","Bioelectronica","Bioestadistica","Biofisica","Bioinstrumentacion","Biologia celular","Biologia molecular",
+        "Biomagnetismo","Biomateriales","Biomecanica","Bioquimica","Biorobotica","Biosensores y biochips","Bioetica","Biognosis","Calculo multivariable","Circuitos electricos",
+        "Circuitos electricos avanzados","Circuitos logicos","Comunicaciones digitales","Comunicacion oral y escrita","Control clasico","Control distribuido","Control neurodifuso",
+        "Control de maquinas electricas","Control de sistemas mecatronicos","Control de actuadores automotrices","Control Inteligente I","Control Inteligente II","Criptografia",
+        "Calculo diferencial e integral","Calculo vectorial","Desarrollo empresarial","Desarrollo sostenible","Desarrollo sustentable","Dibujo asistido por computadora",
+        "Diseño avanzado de elementos de maquinas","Diseño basico de elementos de maquinas","Diseño digital","Diseño de equipo para manejo de materiales","Diseño de experimentos",
+        "Dispositivos electronicos","Dispositivos logicos programables","Dispositivos programables","Economia para ingenieros","Economia y logistica","Ecuaciones diferenciales","Electricidad y magnetismo",
+        "Electromagnetismo","Electronica de potencia","Electronica","Electronica analogica","Electronica analogica y de potencia","Electronica digital","Electronica para comunicaciones","Energias convencionales y renovables",
+        'Estructura de datos','Estructura de la materia','Estructura y propiedades de los materiales','Evaluacion economica de proyectos','Finanzas e ingenieria economica','Fisicoquimica','Fisiologia',
+        'Fundamentos matematicos de ingenieria','Fundamentos de electronica','Fundamentos de fisica','Fundamentos de fisica para la ingenieria','Fundamentos de teoria electromagnetica','Fisica moderna y optica','Graficacion en 3D',
+        'Herramientas computacionales','Humanidades IV desarollo personal y profesional','Humanidades V el humanismo frente a la globalizacion','Imagenologia','Informacion financiera e ingenieria economica','Ingenieria ambiental',
+        'Ingenieria asistida por computadora','Ingenieria web','Ingles I','Ingles II','Ingles III','Ingles avanzado II (CELEX-UPIITA)','Instrumentacion virtual','Instrumentacion virtual aplicada','Introduccion a la mecatronica',
+        'Introduccion a la programacion','Investigacion y desarrollo de proyectos','Liderazgo y emprendedores','Lineas de transmision y antenas','Logica difusa','Mantenimiento y sistemas de manufactura','Manufactura de elementos biomimeticos',
+        'Manufactura integrada por computadora','Maquinas electricas','Mecanismos biomimeticos','Mecanica','Mecanica de fluidos','Mecanica de la particula','Mecanica del cuerpo rigido','Mercadotecnia','Metodologia de la investigacion','Metrologia',
+        'Microcomputadoras automotrices I','Microcomputadoras automotrices II','Microcontroladores avanzados','Microondas','Microprocesadores microcontroladores e interfaz','Modelado y control de sistemas bionicos','Modelado y simulacion de sistemas mecatronicos',
+        'Multimedia','Metodos numericos','Neumatica e hidraulica','Normatividad en telecomunicaciones e informatica','Normatividad y gestion tecnologica','Ondas electromagneticas y sistemas radiantes','Oscilaciones y optica','Probabilidad','Probabilidad y estadistica',
+        'Probabilidad y estadistica para ingenieria','Procesador digital de señales','Procesamiento digital de señales','Procesamiento de imagenes','Procesamiento de señales biologicas','Procesos avanzados de manufactura','Procesos de manufactura',
+        'Produccion mas limpia','Programa alumno tutor','Programacion','Programacion avanzada','Programacion estructurada','Programacion orientada a objetos','Programacion de dispositivos moviles','Programacion de sistemas inmersos','Propagacion de ondas electromagneticas',
+        'Protocolos de internet','Proyecto integrador','Proyecto terminal I','Proyecto terminal II','Proyectos de inversion','Protesis biomimeticas','Quimica inorganica','Quimica organica','Realidad virtual','Reconocimiento de patrones','Redes inteligentes','Redes neuronales',
+        'Redes de telecomunicaciones','Resistencia de materiales','Seguridad industrial','Seguridad en redes','Seminario de actualizacion','Sensores automotrices y acondicionadores de señal I','Sensores automotrices y acondicionadores de señal II',
+        'Sensores y acondicionadores de señal','Sensores y actuadores','Señales y sistemas','Simulacion electronica y diseño de circuitos impresos','Sistema de calidad para la manufactura','Sistemas celulares','Sistemas distribuidos','Sistemas neurodifusos',
+        'Sistemas operativos en tiempo real','Sistemas de calidad','Sistemas de gestion de calidad','Sistemas de vision artificial','Sociedad ciencia y tecnologia','Solucion de problemas y creatividad','Taller de lectura','Telefonia','Teoria de los circuitos',
+        'Teoria electromagnetica','Teoria de la informacion','Teoria de las comunicaciones','Teoria del control','Termodinamica','Trabajo terminal I','Trabajo terminal II','Transmision de datos','Topicos avanzados de electronica','Topicos avanzados de soldadura',
+        'Topicos avanzados de sensores','Uso y mantenimiento de herramental para procesos de manufactura','Variable compleja','Vision artificial','Algebra lineal y numeros complejos','Etica profesion y sociedad','Etica para el ejercicio profesional',
+        'Etica y responsabilidad social','Optica']
+        autocomplete(document.getElementById("prof"), docenteslist);//Profesores
+        autocomplete(document.getElementById("asignatura"), asignaturaslist);//Materia
+        autocomplete(document.getElementById("grup"), gruposlist);//Grupo
+        autocomplete(document.getElementById("aula"), aulaslist);//Lugar
+        autocomplete(document.getElementById("profA"), docenteslist);//Profesores Asesorías
+        autocomplete(document.getElementById("asignaturaA"), asignaturaslist);//Materia Asesoría
+    </script>
+    <script>
+        autocomplete(document.getElementById("MatA"), asignaturaslist);//Materia Asesoría Profesor
+        autocomplete(document.getElementById("LugarA"), aulaslist);//Lugar Asesoría Profesor
+    </script>
+    <script>
+        autocomplete(document.getElementById("RegistroProf"), docenteslist);//Registro Profesor
+    </script>
+    {{!Scripts de Bootstrap}}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

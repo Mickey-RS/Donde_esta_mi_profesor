@@ -1,0 +1,176 @@
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-md-4">
+            <div id="accordion">{{!Acordeón desplegable}}
+                <div class="card">{{!Menu Asesorías}}
+                    <div class="card-header">
+                        <a class="card-link" data-toggle="collapse" href="#MenuAsesorias">Asesorías</a>
+                    </div>
+                    <div id="MenuAsesorias" class="collapse show" data-parent="#accordion">
+                        <div class="card-body">
+                            <form action="/" method="POST">
+                                <div class="form-group autocomplete">
+                                    <input type="text" id="profA" class="form-control" name="profesorAsesoria"
+                                        placeholder="Profesor" autofocus>
+                                </div>
+                                <div class="form-group autocomplete">
+                                    <input type="text" id="asignaturaA" class="form-control" name="materiaAsesoria"
+                                        placeholder="Materia">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-block">
+                                        Buscar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">{{!Menú CLases}}
+                    <div class="card-header">
+                        <a class="card-link" data-toggle="collapse" href="#MenuClases">Clases</a>
+                    </div>
+                    <div id="MenuClases" class="collapse" data-parent="#accordion">
+                        <div class="card-body">
+                            <form action="/" method="POST">
+                                <div class="form-group autocomplete">
+                                    <input type="text" id="prof" class="form-control" name="profesor"
+                                        placeholder="Profesor">
+                                </div>
+                                <div class="form-group autocomplete">
+                                    <input type="text" id="asignatura" class="form-control" name="materia"
+                                        placeholder="Materia">
+                                </div>
+                                <div class="form-group autocomplete">
+                                    <input type="text" id="grup" class="form-control" name="grupo" placeholder="Grupo">
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="dia">
+                                        <option value="">-- Cualquier Día --</option>
+                                        <option value="Lunes">Lunes</option>
+                                        <option value="Martes">Martes</option>
+                                        <option value="Miercoles">Miercoles</option>
+                                        <option value="Jueves">Jueves</option>
+                                        <option value="Viernes">Viernes</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="hora">
+                                        <option value="">-- Cualquier hora --</option>
+                                        <option value="07:00">07:00</option>
+                                        <option value="08:30">08:30</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="11:30">11:30</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="14:30">14:30</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="17:30">17:30</option>
+                                        <option value="19:00">19:00</option>
+                                    </select>
+                                </div>
+                                <div class="form-group autocomplete">
+                                    <input type="text" id="aula" class="form-control" name="lugar" placeholder="Lugar">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-block">
+                                        Buscar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{#if mode}} {{!Si el modo es igual a 1 se ejecutará el bloque de asesorías}}
+            {{#if asesorias}} {{!Si se buscan asesorías}}
+            <div class="panel panel-primary">{{!Si se encuentran coincidencias en la base de datos}}
+                <div class="panel-body scrollable-panel">
+                    <div class="col-md">
+                        <div class="row p-2">
+                            <table class="table table-dark">
+                                <thead>
+                                    <th>Materia</th>
+                                    <th>Profesor</th>
+                                    <th>Horario</th>
+                                    <th>Lugar</th>
+                                </thead>
+                                <tbody>
+                                    {{#each asesorias}}
+                                    <tr>
+                                        <td>{{nombre_mt}}</td>
+                                        <td>{{nombre_prof}}<br>**({{hora_ent}}-{{hora_sal}})</td>
+                                        <td>{{dia}}<br>{{hora_asesoria}}</td>
+                                        <td>{{nombre_lugar}}</td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn btn-secondary">**: Horario del profesor en la UPIITA</div>
+            {{else}}
+            <div class="col-md-8 mx-auto my-auto">{{!No hay coincidencias}}
+                <div class="card">
+                    <div class="card-body text-center">
+                        {{#if vacio}}
+                            <h1>No se encontraron coincidencias...</h1>
+                            <img src="/img/NotFound.png" alt="NotFound" height="250px" width="250px">
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+        {{else}} {{!Modo = 0, se ejecuta el bloque de clases}}
+            {{#if matches}} {{!Si e buscan materias}}
+            <div class="panel panel-primary">{{!Si se encuentran coincidencias en la base de datos}}
+                <div class="panel-body scrollable-panel">
+                    <div class="col-md">
+                        <div class="row p-2">
+                            <table class="table table-dark">
+                                <thead>
+                                    <th>Materia</th>
+                                    <th>Grupo</th>
+                                    <th>Horario</th>
+                                    <th>Profesor</th>
+                                    <th>Lugar</th>
+                                </thead>
+                                <tbody>
+                                    {{#each matches}}
+                                    <tr>
+                                        <td>{{nombre_mt}}</td>
+                                        <td>{{nombre_grupo}}</td>
+                                        <td>{{dia}} - {{hora_clase}}</td>
+                                        <td>{{nombre_prof}}</td>
+                                        <td>{{nombre_lugar}}</td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <div class="col-md-8 mx-auto my-auto">{{!No hay coincidencias}}
+                <div class="card">
+                    <div class="card-body text-center">
+                        {{#if vacio}}
+                            <h1>No se encontraron coincidencias...</h1>
+                            <img src="/img/NotFound.png" alt="NotFound" height="250px" width="250px">
+                        {{else}}
+                            <h1>Encuentra toda la información de asesorías y clases de tus profesores</h1>
+                            <h2>¡Realiza una consulta!</h2>
+                            <h4>*Llena al menos un campo</h4>
+                            <img class="border border-dark rounded-circle" src="/img/Busqueda.png" alt="Consulta" height="250px"
+                                width="250px">
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+        {{/if}}
+    </div>
+</div>
